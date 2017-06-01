@@ -225,22 +225,22 @@ class Model(dict,metaclass=ModelMetaclass):
 		rows =await execute(self.__update__,args)
 		if rows !=1:
 			logging.warn('failed to update by primary key:affected rows:%s' % rows)
-	 async def remove(self):
-        args = [self.getValue(self.__primary_key__)]
-        rows = await execute(self.__delete__, args)
-        if rows != 1:
-            logging.warn('failed to remove by primary key: affected rows: %s' % rows)	
+
+	async def remove(self):
+		args = [self.getValue(self.__primary_key__)]
+		rows = await execute(self.__delete__, args)
+		if rows != 1:
+			logging.warn('failed to remove by primary key: affected rows: %s' % rows)	
 
 
 
-from orm import Model ,StringField,IntegerField
+
 
 class User(Model):
 	__table__='users'
 
 	id = IntegerField(primary_key=True)
 	name=StringField()
-
 
 
 
