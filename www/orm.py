@@ -111,7 +111,7 @@ class ModelMetaclass(type):
 			return type.__new__(cls,name,bases,attrs)
 
 		tableName=attrs.get('__table__',None) or name
-		logging.info('found model:%s (table:%s)') % (name,tableName)
+		logging.info('found model:%s (table:%s)' % (name,tableName))
 
 
 		mappings=dict()
@@ -143,8 +143,8 @@ class ModelMetaclass(type):
 		attrs['__select__'] = "select `%s`, %s from `%s`" % (primaryKey, ', '.join(escaped_fields),tableName)
 		attrs['__insert__'] ='insert into `%s` (%s,`%s`) values (%s)' % (tableName, ', '.join(escaped_fields),primaryKey,create_args_string(len(escaped_fields) + 1))
 		attrs['__update__'] = 'update `%s` set %s where `%s`=?' % (tableName,', '.join(map(lambda f: '`%s`=?' % (mappings.get(f).name or f),fields)),primaryKey)
-		attrs['__delete__'] = 'delete from `%s` where `%s`=?' % (tableName,PrimayKey)
-		return type.__new__(cls,name,base,attrs)
+		attrs['__delete__'] = 'delete from `%s` where `%s`=?' % (tableName,primaryKey)
+		return type.__new__(cls,name,bases,attrs)
 
 
 
@@ -234,13 +234,6 @@ class Model(dict,metaclass=ModelMetaclass):
 
 
 
-
-
-class User(Model):
-	__table__='users'
-
-	id = IntegerField(primary_key=True)
-	name=StringField()
 
 
 
